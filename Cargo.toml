@@ -1,6 +1,6 @@
 [package]
 name = "mssh"
-version = "2.0.3"
+version = "2.0.4"
 edition = "2021"
 authors = ["Caterpolaris"]
 description = "A modern SSH configuration management tool with TUI interface"
