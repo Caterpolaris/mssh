@@ -59,18 +59,22 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        target: 
-          - x86_64-unknown-linux-gnu
-          - x86_64-apple-darwin
-          - aarch64-apple-darwin
-        exclude:
+        include:
+          # Linux x86_64
           - os: ubuntu-latest
-            target: x86_64-apple-darwin
-          - os: ubuntu-latest
-            target: aarch64-apple-darwin
-          - os: macos-latest
             target: x86_64-unknown-linux-gnu
+            use_cross: false
+          # Linux ARM64
+          - os: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            use_cross: true
+          # macOS
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            use_cross: false
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            use_cross: false
 
     steps:
       - name: Checkout sources
@@ -81,5 +85,16 @@ jobs:
         with:
           targets: ${{ matrix.target }}
 
+      - name: Install cross (ARM cross-compilation)
+        if: matrix.use_cross == true
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cross
+
       - name: Build
-        run: cargo build --release --target ${{ matrix.target }} 
+        run: |
+          if [[ "${{ matrix.use_cross }}" == "true" ]]; then
+            cross build --release --target ${{ matrix.target }}
+          else
+            cargo build --release --target ${{ matrix.target }}
+          fi 
