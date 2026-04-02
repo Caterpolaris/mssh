@@ -42,7 +42,7 @@ impl SSHManager {
             std::io::stdout(),
             LeaveAlternateScreen,
             DisableMouseCapture, // 禁用鼠标捕获
-            Show // 显示光标
+            Show                 // 显示光标
         )?;
 
         // 确保终端设置完全恢复
@@ -163,7 +163,7 @@ impl SSHManager {
             std::io::stdout(),
             LeaveAlternateScreen,
             DisableMouseCapture, // 禁用鼠标捕获
-            Show // 确保显示光标
+            Show                 // 确保显示光标
         )?;
         std::io::stdout().flush()?;
 
